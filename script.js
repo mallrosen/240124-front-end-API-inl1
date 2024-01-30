@@ -56,7 +56,7 @@ let editingPlayer = null
 const onClickPlayer = function(event){
     const htmlElementetSomViHarKlickatPa = event.target
     console.log(htmlElementetSomViHarKlickatPa.dataset.stefansplayerid)
-    const player = players.find(p=> p.id === htmlElementetSomViHarKlickatPa.dataset.stefansplayerid)
+    const player = players.find(p=> p.id == htmlElementetSomViHarKlickatPa.dataset.stefansplayerid)
     playerName.value = player.name
     jersey.value = player.jersey
     position.value = player.position
@@ -87,6 +87,7 @@ closeDialog.addEventListener("click",async (ev)=>{
     }
     //TOG BORT (KANSKE BEHÖVS SEN)
     // let response = 
+    
     await fetch(url,{
         headers: {
             'Accept': 'application/json',
