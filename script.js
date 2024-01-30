@@ -85,8 +85,9 @@ closeDialog.addEventListener("click",async (ev)=>{
         url =  "http://localhost:3000/players"
         method = "POST"
     }
-
-    let response = await fetch(url,{
+    //TOG BORT (KANSKE BEHÖVS SEN)
+    // let response = 
+    await fetch(url,{
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -95,7 +96,8 @@ closeDialog.addEventListener("click",async (ev)=>{
           body: JSON.stringify(o)                
     })
 
-    let json = await response.json()
+    //TOG BORT FÖR ATT FÅ SAVE_BTN ATT FUNGERA (KANSKE BEHÖVS SEN)
+    // let json = await response.json()
 
     players = await fetchPlayers()
     updateTable()
