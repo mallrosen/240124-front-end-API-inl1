@@ -1,5 +1,3 @@
-
-
 const allPlayersTBody = document.querySelector("#allPlayers tbody")
 const searchPlayer = document.getElementById("searchPlayer")
 const btnAdd = document.getElementById("btnAdd")
@@ -65,6 +63,18 @@ const onClickPlayer = function(event){
     MicroModal.show('modal-1');
 
 }
+
+//VARFÖR FUNGERAR INTE DETTA?????
+
+const playerNameError = document.getElementById('playerNameError')
+
+playerName.addEventListener("input", () => {
+    if (validator.isEmpty(playerName.value)) {
+      playerNameError.style.display = "block";
+    } else {
+      playerNameError.style.display = "none";
+    }
+  });
 
 closeDialog.addEventListener("click",async (ev)=>{
     ev.preventDefault()
