@@ -7,7 +7,7 @@ const allSortLinks = document.getElementsByClassName('bi')
 
 let currentSortCol = ""
 let currentSortOrder = "" 
-// let currentQ = ""
+let currentQ = ""
 
 
 Object.values(allSortLinks).forEach(link=>{
@@ -22,11 +22,11 @@ Object.values(allSortLinks).forEach(link=>{
 
 //KOLLA IMORGON 27 FEB !!!!!!
 
-// searchPlayer.addEventListener("input", async ()=>{
-//     currentQ = searchPlayer.value
-//     players = await fetchPlayers()
-//     updateTable()
-// })
+searchPlayer.addEventListener("input", async ()=>{
+    currentQ = searchPlayer.value
+    players = await fetchPlayers()
+    updateTable()
+})
 
 
 function Player(id, name,jersey,team, position){
@@ -47,7 +47,7 @@ function Player(id, name,jersey,team, position){
 
 async function fetchPlayers(){
     return await((await fetch("http://localhost:3000/players?sortByName=" 
-    + currentSortCol + "&sortOrder=" + currentSortOrder)).json())
+    + currentSortCol + "&sortOrder=" + currentSortOrder +"&q=" + currentQ)).json())
 }
 
 let players =  await fetchPlayers()
