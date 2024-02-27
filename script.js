@@ -125,9 +125,13 @@ const onClickPlayer = function(event){
 
 }
 
-//VARFÖR FUNGERAR INTE DETTA?????
+//Validering
 
 const playerNameError = document.getElementById('playerNameError')
+const playerJerseyError = document.getElementById('playerJerseyError')
+const playerTeamError = document.getElementById('playerTeamError')
+const playerPositionError = document.getElementById('playerPositionError')
+
 
 playerName.addEventListener("input", () => {
     if (validator.isEmpty(playerName.value)) {
@@ -136,6 +140,25 @@ playerName.addEventListener("input", () => {
       playerNameError.style.display = "none";
     }
   });
+
+  jersey.addEventListener("input", () => {
+    if (validator.isEmpty(jersey.value)) {
+      playerJerseyError.style.display = "block";
+    } else {
+      playerJerseyError.style.display = "none";
+    }
+  });
+  
+
+  team.addEventListener("input", () => {
+    if (validator.isEmpty(team.value)) {
+      playerTeamError.style.display = "block";
+    } else {
+      playerTeamError.style.display = "none";
+    }
+  });
+
+
 
 closeDialog.addEventListener("click",async (ev)=>{
     ev.preventDefault()
@@ -180,7 +203,7 @@ closeDialog.addEventListener("click",async (ev)=>{
 btnAdd.addEventListener("click",()=>{
     playerName.value = ""
     jersey.value = 0
-    position.value = ""
+    position.value = "Forward"
     editingPlayer = null
 
     MicroModal.show('modal-1');

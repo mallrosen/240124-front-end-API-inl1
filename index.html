@@ -90,18 +90,15 @@
             <span style="color: red;">* required fields</span>
           </header>
           <main class="modal__content" id="modal-1-content">
-              <p>
-                  <span id="playerNameError" style="color: red;">*</span>
-                  <label>Name</label>
+                  <label>Name <span id="playerNameError" style="color: red;">*</span></label>
                   <input
                     type="text"
                     name="playerName"
                     id="playerName"
                     placeholder="Player name"
                     aria-label="Player name"
-                    required
-                  />
-                  <label>Jersey</label>
+                    required/>
+                  <label>Jersey <span id="playerJerseyError" style="color: red;">*</span></label>
                   <input
                     type="number"
                     name="jersey"
@@ -110,7 +107,7 @@
                     aria-label="Jersey"
                     required
                   />
-                  <label>team</label>
+                  <label>Team <span id="playerTeamError" style="color: red;">*</span> </label>
                   <input
                     type="text"
                     name="team"
@@ -131,10 +128,7 @@
                   <option>Defence</option>
                   <option>Forward</option>
                 </select>
-                
 
-      
-            </p>
           </main>
           <footer class="modal__footer">
             <button  id="closeDialog">Save</button>
@@ -145,12 +139,6 @@
     </form>
 
  </div>
-
-
-
-
-
-
 
   <script src="https://unpkg.com/validator@latest/validator.min.js"></script>
   <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
