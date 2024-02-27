@@ -3,6 +3,31 @@ const searchPlayer = document.getElementById("searchPlayer")
 const btnAdd = document.getElementById("btnAdd")
 const closeDialog = document.getElementById("closeDialog")
 
+const allSortLinks = document.getElementsByClassName('bi') 
+
+let currentSortCol = ""
+let currentSortOrder = "" 
+// let currentQ = ""
+
+
+Object.values(allSortLinks).forEach(link=>{
+    link.addEventListener("click",async()=>{
+        currentSortCol = link.dataset.sortcol
+        currentSortOrder = link.dataset.sortorder
+        players = await fetchPlayers()
+        updateTable()
+    })
+    
+})
+
+//KOLLA IMORGON 27 FEB !!!!!!
+
+// searchPlayer.addEventListener("input", async ()=>{
+//     currentQ = searchPlayer.value
+//     players = await fetchPlayers()
+//     updateTable()
+// })
+
 
 function Player(id, name,jersey,team, position){
     this.id = id
@@ -18,8 +43,11 @@ function Player(id, name,jersey,team, position){
     }
 }
 
+//HAR LAGT TILL Q 
+
 async function fetchPlayers(){
-    return await((await fetch('http://localhost:3000/players')).json())
+    return await((await fetch("http://localhost:3000/players?sortByName=" 
+    + currentSortCol + "&sortOrder=" + currentSortOrder)).json())
 }
 
 let players =  await fetchPlayers()
@@ -81,15 +109,15 @@ closeDialog.addEventListener("click",async (ev)=>{
     let url = ""
     let method = ""
     console.log(url)
-    var o = {
+    let changePlayer = {
         "name" : playerName.value,
         "jersey" : jersey.value,
         "position": position.value
         }
 
     if(editingPlayer != null){
-        o.id = editingPlayer.id;
-        url =  "http://localhost:3000/players/" + o.id
+        changePlayer.id = editingPlayer.id;
+        url =  "http://localhost:3000/players/" + changePlayer.id
         method = "PUT"
     }else{
         url =  "http://localhost:3000/players"

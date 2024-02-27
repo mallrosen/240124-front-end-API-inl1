@@ -7,6 +7,8 @@
     <link rel="shortcut icon" href="https://picocss.com/favicon.ico" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
     <link rel="stylesheet" href="custom.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"/>
+
   </head>
 
   <body>
@@ -34,15 +36,18 @@
 </form>
 
 <table role="grid" id="allPlayers">
-<thead>
-  <tr>
-    <th scope="col">Name</th>
-    <th scope="col">Jersey</th>
-    <th scope="col">Position</th>
-    <th scope="col">Team</th>
-  </tr>
-</thead>
+
+  <thead>
+    <tr>
+      <th scope="col"> Name  <i data-sortcol="name" data-sortorder="asc" class="bi bi-arrow-up"></i>  <i data-sortcol="name" data-sortorder="desc" class="bi bi-arrow-down"></i></th>
+      <th scope="col"> Jersey <i data-sortcol="jersey" data-sortorder="asc" class="bi bi-arrow-up"></i>  <i data-sortcol="jersey" data-sortorder="desc" class="bi bi-arrow-down"></i></th>
+      <th scope="col"> Team <i data-sortcol="team" data-sortorder="asc" class="bi bi-arrow-up"></i>  <i data-sortcol="team" data-sortorder="desc" class="bi bi-arrow-down"></i></th>
+      <th scope="col"> Position <i data-sortcol="position" data-sortorder="asc" class="bi bi-arrow-up"></i>  <i data-sortcol="position" data-sortorder="desc" class="bi bi-arrow-down"></i></th>
+    </tr>
+  </thead>
+
 <tbody>
+
   <!-- <tr data-id="1"><th scope="row">Peter Forsberg</th><td>21</td><td>Forward</td><td>Colorado</td></tr><tr data-id="2"><th scope="row">Mats Sundin</th><td>13</td><td>Forward</td><td>Toronto</td></tr><tr data-id="3"><th scope="row">Niklas Lidström</th><td>5</td><td>Defence</td><td>Detroit</td></tr><tr data-id="4"><th scope="row">Mikko Rantanen</th><td>96</td><td>Forward</td><td>Colorado</td></tr><tr data-id="5"><th scope="row">Jack Johnson</th><td>3</td><td>Defence</td><td>Colorado</td></tr> -->
 </tbody>
 </table>
