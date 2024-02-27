@@ -2,12 +2,17 @@ const allPlayersTBody = document.querySelector("#allPlayers tbody")
 const searchPlayer = document.getElementById("searchPlayer")
 const btnAdd = document.getElementById("btnAdd")
 const closeDialog = document.getElementById("closeDialog")
+const pager = document.getElementById('pager')
 
 const allSortLinks = document.getElementsByClassName('bi') 
 
 let currentSortCol = ""
 let currentSortOrder = "" 
 let currentQ = ""
+let currentPageNo = 1;
+let currentPageSize = 10;
+let currentTotal = 0
+let offset = 0
 
 
 Object.values(allSortLinks).forEach(link=>{
@@ -20,7 +25,6 @@ Object.values(allSortLinks).forEach(link=>{
     
 })
 
-//KOLLA IMORGON 27 FEB !!!!!!
 
 searchPlayer.addEventListener("input", async ()=>{
     currentQ = searchPlayer.value
@@ -43,14 +47,18 @@ function Player(id, name,jersey,team, position){
     }
 }
 
-//HAR LAGT TILL Q 
 
 async function fetchPlayers(){
-    return await((await fetch("http://localhost:3000/players?sortByName=" 
-    + currentSortCol + "&sortOrder=" + currentSortOrder +"&q=" + currentQ)).json())
+    const result = await((await fetch("http://localhost:3000/players?sortByName=" 
+    + currentSortCol + "&sortOrder=" + currentSortOrder +"&q=" + currentQ + "&limit=" + currentPageSize + "&offset=" + offset)).json())
+    currentTotal = result.totalNr
+    console.log(currentTotal);
+    return result.result
+
 }
 
 let players =  await fetchPlayers()
+console.log(players);
 
 searchPlayer.addEventListener("input", function() {
     const searchFor = searchPlayer.value.toLowerCase() 
@@ -65,6 +73,30 @@ searchPlayer.addEventListener("input", function() {
 
 });
 
+function createPager(){
+    pager.innerHTML = ""
+    let totalPages = Math.ceil(currentTotal / currentPageSize)
+    for(let i = 1; i <= totalPages; i++){
+        const li = document.createElement('li')
+        li.classList.add("page-item")
+        if(i == currentPageNo){
+            li.classList.add("active")
+        }
+        const a = document.createElement('a')
+        a.href="#"
+        a.innerText = i
+        a.classList.add("page-link")
+        li.appendChild(a)
+        a.addEventListener("click", async ()=>{
+            
+            currentPageNo = i
+            offset = (currentPageNo -1)* currentPageSize
+            players = await fetchPlayers()
+            updateTable()
+        })
+        pager.appendChild(li)
+    }
+}
 
 const createTableTdOrTh = function(elementType,innerText){
     let element = document.createElement(elementType)
@@ -75,6 +107,7 @@ const createTableTdOrTh = function(elementType,innerText){
 
 const playerName = document.getElementById("playerName")
 const jersey = document.getElementById("jersey")
+const team = document.getElementById("team")
 const position = document.getElementById("position")
 
 let editingPlayer = null
@@ -112,6 +145,7 @@ closeDialog.addEventListener("click",async (ev)=>{
     let changePlayer = {
         "name" : playerName.value,
         "jersey" : jersey.value,
+        "team" : team.value,
         "position": position.value
         }
 
@@ -132,7 +166,7 @@ closeDialog.addEventListener("click",async (ev)=>{
             'Content-Type': 'application/json'
           },
           method: method,
-          body: JSON.stringify(o)                
+          body: JSON.stringify(changePlayer)                
     })
 
     //TOG BORT FÖR ATT FÅ SAVE_BTN ATT FUNGERA (KANSKE BEHÖVS SEN)
@@ -158,7 +192,7 @@ const updateTable = function(){
     // while(allPlayersTBody.firstChild)
     //     allPlayersTBody.firstChild.remove()
     allPlayersTBody.innerHTML = ""
-
+    createPager()
     // först ta bort alla children
     for(let i = 0; i < players.length;i++) { // hrmmm you do foreach if you'd like, much nicer! 
         if(players[i].visible == false){
@@ -188,6 +222,7 @@ const updateTable = function(){
 
 
         allPlayersTBody.appendChild(tr)
+
     }
 
     // innerHTML och backticks `
