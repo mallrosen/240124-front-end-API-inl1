@@ -10,7 +10,7 @@ let currentSortCol = ""
 let currentSortOrder = "" 
 let currentQ = ""
 let currentPageNo = 1;
-let currentPageSize = 10;
+let currentPageSize = 5;
 let currentTotal = 0
 let offset = 0
 
