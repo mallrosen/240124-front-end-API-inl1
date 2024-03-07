@@ -6,23 +6,22 @@ const pager = document.getElementById('pager')
 
 const allSortLinks = document.getElementsByClassName('bi') 
 
-let currentSortCol = ""
-let currentSortOrder = "" 
-let currentQ = ""
+let currentSortCol = "";
+let currentSortOrder = ""; 
+let currentQ = "";
 let currentPageNo = 1;
 let currentPageSize = 5;
-let currentTotal = 0
-let offset = 0
+let currentTotal = 0;
+let offset = 0;
 
 
-Object.values(allSortLinks).forEach(link=>{
+Object.values(allSortLinks).forEach((link)=>{
     link.addEventListener("click",async()=>{
         currentSortCol = link.dataset.sortcol
         currentSortOrder = link.dataset.sortorder
         players = await fetchPlayers()
         updateTable()
-    })
-    
+    })  
 })
 
 
@@ -42,59 +41,20 @@ function debounce(cb, delay = 250) {
     updateTable()
   }, 1000)
 
-
-
 searchPlayer.addEventListener("input",(e)=>{
     updateQuery(e.target.value)
 })
-
-// searchPlayer.addEventListener("input", async ()=>{
-//     currentQ = searchPlayer.value
-//     players = await fetchPlayers()
-//     updateTable()
-// })
-
-
-
-function Player(id, name,jersey,team, position){
-    this.id = id
-    this.name = name
-    this.jersey = jersey
-    this.team = team
-    this.position = position
-    this.visible = true
-    this.matches = function(searchFor){
-        return  this.name.toLowerCase().includes(searchFor) || 
-                this.position.toLowerCase().includes(searchFor) || 
-                this.team.toLowerCase().includes(searchFor)        
-    }
-}
-
 
 async function fetchPlayers(){
     const result = await((await fetch("http://localhost:3000/players?sortByName=" 
     + currentSortCol + "&sortOrder=" + currentSortOrder +"&q=" + currentQ + "&limit=" + currentPageSize + "&offset=" + offset)).json())
     currentTotal = result.totalNr
-    console.log(currentTotal);
     return result.result
 
 }
 
 let players =  await fetchPlayers()
-console.log(players);
 
-// searchPlayer.addEventListener("input", function() {
-//     const searchFor = searchPlayer.value.toLowerCase() 
-//     for(let i = 0; i < players.length;i++){ // TODO add a matches function
-//         if(players[i].matches(searchFor)){
-//             players[i].visible = true                            
-//         }else{
-//             players[i].visible = false 
-//         }
-//     }
-//     updateTable()
-
-// });
 
 function createPager(){
     pager.innerHTML = ""
@@ -136,9 +96,8 @@ const position = document.getElementById("position")
 let editingPlayer = null
 
 const onClickPlayer = function(event){
-    const htmlElementetSomViHarKlickatPa = event.target
-    console.log(htmlElementetSomViHarKlickatPa.dataset.stefansplayerid)
-    const player = players.find(p=> p.id == htmlElementetSomViHarKlickatPa.dataset.stefansplayerid)
+    const editClick = event.target
+    const player = players.find(p=> p.id == editClick.dataset.playerId)
     playerName.value = player.name
     jersey.value = player.jersey
     position.value = player.position
@@ -147,8 +106,6 @@ const onClickPlayer = function(event){
     MicroModal.show('modal-1');
 
 }
-
-//Validering
 
 const playerNameError = document.getElementById('playerNameError')
 const playerJerseyError = document.getElementById('playerJerseyError')
@@ -187,7 +144,6 @@ closeDialog.addEventListener("click",async (ev)=>{
     ev.preventDefault()
     let url = ""
     let method = ""
-    console.log(url)
     let changePlayer = {
         "name" : playerName.value,
         "jersey" : jersey.value,
@@ -203,8 +159,6 @@ closeDialog.addEventListener("click",async (ev)=>{
         url =  "http://localhost:3000/players"
         method = "POST"
     }
-    //TOG BORT (KANSKE BEHÖVS SEN)
-    // let response = 
     
     await fetch(url,{
         headers: {
@@ -215,8 +169,6 @@ closeDialog.addEventListener("click",async (ev)=>{
           body: JSON.stringify(changePlayer)                
     })
 
-    //TOG BORT FÖR ATT FÅ SAVE_BTN ATT FUNGERA (KANSKE BEHÖVS SEN)
-    // let json = await response.json()
 
     players = await fetchPlayers()
     updateTable()
@@ -236,12 +188,10 @@ btnAdd.addEventListener("click",()=>{
 
 const updateTable = async function(){
     players = await fetchPlayers()
-    // while(allPlayersTBody.firstChild)
-    //     allPlayersTBody.firstChild.remove()
     allPlayersTBody.innerHTML = ""
     createPager()
-    // först ta bort alla children
-    for(let i = 0; i < players.length;i++) { // hrmmm you do foreach if you'd like, much nicer! 
+
+    for(let i = 0; i < players.length;i++) { 
         if(players[i].visible == false){
             continue
         }
@@ -255,56 +205,28 @@ const updateTable = async function(){
         let td = document.createElement("td")
         let btn = document.createElement("button")
         btn.textContent = "EDIT"
-        btn.dataset.stefansplayerid=players[i].id
+        btn.dataset.playerId=players[i].id
         td.appendChild(btn)
         tr.appendChild(td)
 
-
         btn.addEventListener("click",onClickPlayer);
-
-        // btn.addEventListener("click",function(){
-        //       alert(players[i].name)  
-        //       //                      detta funkar fast med sk closures = magi vg
-        // })
-
-
         allPlayersTBody.appendChild(tr)
-
     }
-
-    // innerHTML och backticks `
-    // Problem - aldrig bra att bygga strängar som innehåller/kan innehålla html
-    //    injection
-    // for(let i = 0; i < players.length;i++) { // hrmmm you do foreach if you'd like, much nicer! 
-    //                                         // I will show you in two weeks
-    //                                         //  or for p of players     
-    //     let trText = `<tr><th scope="row">${players[i].name}</th><td>${players[i].jersey}</td><td>${players[i].position}</td><td>${players[i].team}</td></tr>`
-    //     allPlayersTBody.innerHTML += trText
-    // }
-    // createElement
 }
-
-
-
-
 updateTable()
 
-
-
-
-
 MicroModal.init({
-    onShow: modal => console.info(`${modal.id} is shown`), // [1]
-    onClose: modal => console.info(`${modal.id} is hidden`), // [2]
+    onShow: modal => console.info(`${modal.id} is shown`),
+    onClose: modal => console.info(`${modal.id} is hidden`), 
    
-    openTrigger: 'data-custom-open', // [3]
-    closeTrigger: 'data-custom-close', // [4]
-    openClass: 'is-open', // [5]
-    disableScroll: true, // [6]
-    disableFocus: false, // [7]
-    awaitOpenAnimation: false, // [8]
-    awaitCloseAnimation: false, // [9]
-    debugMode: true // [10]
+    openTrigger: 'data-custom-open',
+    closeTrigger: 'data-custom-close', 
+    openClass: 'is-open', 
+    disableScroll: true, 
+    disableFocus: false, 
+    awaitOpenAnimation: false, 
+    awaitCloseAnimation: false, 
+    debugMode: true 
   });
 
 
