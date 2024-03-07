@@ -26,11 +26,34 @@ Object.values(allSortLinks).forEach(link=>{
 })
 
 
-searchPlayer.addEventListener("input", async ()=>{
-    currentQ = searchPlayer.value
-    players = await fetchPlayers()
+function debounce(cb, delay = 250) {
+    let timeout
+  
+    return (...args) => {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        cb(...args)
+      }, delay)
+    }
+  }
+
+  const updateQuery = debounce((query) => {
+    currentQ = query
     updateTable()
+  }, 1000)
+
+
+
+searchPlayer.addEventListener("input",(e)=>{
+    updateQuery(e.target.value)
 })
+
+// searchPlayer.addEventListener("input", async ()=>{
+//     currentQ = searchPlayer.value
+//     players = await fetchPlayers()
+//     updateTable()
+// })
+
 
 
 function Player(id, name,jersey,team, position){
@@ -60,18 +83,18 @@ async function fetchPlayers(){
 let players =  await fetchPlayers()
 console.log(players);
 
-searchPlayer.addEventListener("input", function() {
-    const searchFor = searchPlayer.value.toLowerCase() 
-    for(let i = 0; i < players.length;i++){ // TODO add a matches function
-        if(players[i].matches(searchFor)){
-            players[i].visible = true                            
-        }else{
-            players[i].visible = false 
-        }
-    }
-    updateTable()
+// searchPlayer.addEventListener("input", function() {
+//     const searchFor = searchPlayer.value.toLowerCase() 
+//     for(let i = 0; i < players.length;i++){ // TODO add a matches function
+//         if(players[i].matches(searchFor)){
+//             players[i].visible = true                            
+//         }else{
+//             players[i].visible = false 
+//         }
+//     }
+//     updateTable()
 
-});
+// });
 
 function createPager(){
     pager.innerHTML = ""
@@ -211,7 +234,8 @@ btnAdd.addEventListener("click",()=>{
 })
 
 
-const updateTable = function(){
+const updateTable = async function(){
+    players = await fetchPlayers()
     // while(allPlayersTBody.firstChild)
     //     allPlayersTBody.firstChild.remove()
     allPlayersTBody.innerHTML = ""
